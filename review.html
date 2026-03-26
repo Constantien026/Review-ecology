@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ecology Reviewer</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #0a9396;
+    --teal-dark: #005f73;
+    --teal-light: #94d2bd;
+    --cream: #f4f1de;
+    --sand: #e9c46a;
+    --coral: #e76f51;
+    --dark: #0d1b1e;
+    --mid: #1a2e32;
+    --text: #e8f4f5;
+    --muted: #94b8be;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, var(--teal-dark) 0%, var(--dark) 60%);
+    padding: 40px 32px 32px;
+    border-bottom: 2px solid var(--teal);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(10,147,150,0.2), transparent 70%);
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    color: var(--teal-light);
+    letter-spacing: 0.04em;
+  }
+  header p {
+    color: var(--muted);
+    margin-top: 8px;
+    font-size: 1rem;
+    font-weight: 300;
+  }
+
+  /* TABS */
+  .tab-bar {
+    display: flex;
+    background: var(--mid);
+    border-bottom: 2px solid var(--teal-dark);
+    overflow-x: auto;
+  }
+  .tab-btn {
+    padding: 16px 28px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 3px solid transparent;
+    transition: all 0.25s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--teal-light); }
+  .tab-btn.active {
+    color: var(--teal-light);
+    border-bottom-color: var(--teal);
+    background: rgba(10,147,150,0.08);
+  }
+
+  /* CONTENT */
+  .tab-content { display: none; padding: 40px 32px; max-width: 1000px; margin: 0 auto; }
+  .tab-content.active { display: block; }
+
+  /* SECTION CARDS */
+  .section-card {
+    background: var(--mid);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    border-left: 4px solid var(--teal);
+    animation: fadeUp 0.4s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .section-card:nth-child(2) { animation-delay: 0.06s; }
+  .section-card:nth-child(3) { animation-delay: 0.12s; }
+  .section-card:nth-child(4) { animation-delay: 0.18s; }
+  .section-card:nth-child(5) { animation-delay: 0.24s; }
+  .section-card:nth-child(6) { animation-delay: 0.3s; }
+
+  .section-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.55rem;
+    color: var(--teal-light);
+    margin-bottom: 16px;
+  }
+  .section-card h3 {
+    font-size: 1.1rem;
+    color: var(--sand);
+    margin: 20px 0 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .section-card p {
+    color: #c8dde0;
+    line-height: 1.8;
+    margin-bottom: 12px;
+    font-size: 0.97rem;
+  }
+  .section-card ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  .section-card ul li {
+    padding: 8px 0 8px 22px;
+    position: relative;
+    color: #c8dde0;
+    line-height: 1.7;
+    font-size: 0.97rem;
+    border-bottom: 1px solid rgba(10,147,150,0.1);
+  }
+  .section-card ul li:last-child { border-bottom: none; }
+  .section-card ul li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--teal);
+  }
+
+  /* LEVELS HIERARCHY */
+  .hierarchy {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 16px 0;
+  }
+  .level-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .level-badge {
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    min-width: 160px;
+    text-align: center;
+  }
+  .level-badge.ecology { background: var(--teal); color: white; }
+  .level-badge.above { background: rgba(10,147,150,0.15); color: var(--muted); border: 1px solid rgba(10,147,150,0.3); }
+  .level-badge.below { background: rgba(148,178,190,0.12); color: #94b8be; border: 1px dashed rgba(148,178,190,0.3); }
+  .level-arrow { color: var(--teal); font-size: 1rem; }
+
+  /* DEFINITION TABLE */
+  .def-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2px;
+    margin-top: 12px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .def-term {
+    background: rgba(10,147,150,0.2);
+    padding: 14px 18px;
+    font-weight: 600;
+    color: var(--teal-light);
+    font-size: 0.95rem;
+  }
+  .def-desc {
+    background: rgba(255,255,255,0.04);
+    padding: 14px 18px;
+    color: #c8dde0;
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  /* COMPONENT BADGES */
+  .badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .badge {
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .badge-green { background: rgba(75,180,100,0.2); color: #7de897; border: 1px solid rgba(75,180,100,0.4); }
+  .badge-blue { background: rgba(10,147,150,0.2); color: var(--teal-light); border: 1px solid rgba(10,147,150,0.4); }
+  .badge-orange { background: rgba(231,111,81,0.2); color: #f4a28c; border: 1px solid rgba(231,111,81,0.4); }
+
+  /* ── ELEMENT CYCLES TAB ── */
+  .cycle-card {
+    background: var(--mid);
+    border-radius: 12px;
+    margin-bottom: 32px;
+    overflow: hidden;
+    animation: fadeUp 0.4s ease both;
+  }
+  .cycle-header {
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .cycle-icon {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .cycle-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+  }
+  .cycle-header .toggle-arrow {
+    margin-left: auto;
+    font-size: 1rem;
+    transition: transform 0.3s;
+    color: var(--muted);
+  }
+  .cycle-body {
+    padding: 0 28px 28px;
+  }
+  .cycle-body p {
+    color: #c8dde0;
+    line-height: 1.8;
+    margin-bottom: 14px;
+    font-size: 0.97rem;
+  }
+  .cycle-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 18px 0;
+    position: relative;
+  }
+  .cycle-steps::before {
+    content: '';
+    position: absolute;
+    left: 22px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--teal), transparent);
+  }
+  .cycle-step {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    padding: 12px 0;
+  }
+  .step-num {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .step-text { padding-top: 10px; color: #c8dde0; font-size: 0.95rem; line-height: 1.6; }
+  .step-text strong { color: var(--teal-light); }
+
+  /* Cycle colors */
+  .co2 .cycle-header { background: linear-gradient(135deg, rgba(10,147,150,0.25), rgba(0,95,115,0.1)); border-left: 4px solid var(--teal); }
+  .co2 .cycle-icon { background: rgba(10,147,150,0.2); }
+  .co2 .step-num { background: rgba(10,147,150,0.25); color: var(--teal-light); border: 2px solid var(--teal); }
+
+  .nitrogen .cycle-header { background: linear-gradient(135deg, rgba(148,178,190,0.2), rgba(10,147,150,0.05)); border-left: 4px solid #94b8be; }
+  .nitrogen .cycle-icon { background: rgba(148,178,190,0.2); }
+  .nitrogen .step-num { background: rgba(148,178,190,0.2); color: #b8d4d8; border: 2px solid #94b8be; }
+
+  .water .cycle-header { background: linear-gradient(135deg, rgba(33,100,168,0.25), rgba(10,147,150,0.05)); border-left: 4px solid #4f9cf0; }
+  .water .cycle-icon { background: rgba(33,100,168,0.2); }
+  .water .step-num { background: rgba(33,100,168,0.2); color: #8ec5fc; border: 2px solid #4f9cf0; }
+
+  .phosphorus .cycle-header { background: linear-gradient(135deg, rgba(233,196,106,0.2), rgba(10,147,150,0.05)); border-left: 4px solid var(--sand); }
+  .phosphorus .cycle-icon { background: rgba(233,196,106,0.2); }
+  .phosphorus .step-num { background: rgba(233,196,106,0.2); color: #f4d06a; border: 2px solid var(--sand); }
+
+  .oxygen .cycle-header { background: linear-gradient(135deg, rgba(127,210,180,0.2), rgba(10,147,150,0.05)); border-left: 4px solid #7fd2b4; }
+  .oxygen .cycle-icon { background: rgba(127,210,180,0.2); }
+  .oxygen .step-num { background: rgba(127,210,180,0.2); color: #a8e6cf; border: 2px solid #7fd2b4; }
+
+  .key-box {
+    background: rgba(10,147,150,0.08);
+    border: 1px solid rgba(10,147,150,0.25);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 16px;
+  }
+  .key-box h4 { color: var(--sand); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .key-box p { margin: 0; font-size: 0.9rem; }
+
+  /* ── QUIZ TAB ── */
+  .quiz-intro {
+    text-align: center;
+    padding: 28px;
+    background: var(--mid);
+    border-radius: 12px;
+    margin-bottom: 32px;
+  }
+  .quiz-intro h2 { font-family: 'Playfair Display', serif; color: var(--teal-light); font-size: 1.8rem; margin-bottom: 8px; }
+  .quiz-intro p { color: var(--muted); }
+
+  .quiz-controls {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .btn {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+  }
+  .btn-primary { background: var(--teal); color: white; }
+  .btn-primary:hover { background: var(--teal-dark); transform: translateY(-1px); }
+  .btn-secondary { background: rgba(10,147,150,0.15); color: var(--teal-light); border: 1px solid var(--teal); }
+  .btn-secondary:hover { background: rgba(10,147,150,0.25); }
+  .btn-danger { background: rgba(231,111,81,0.2); color: #f4a28c; border: 1px solid var(--coral); }
+  .btn-danger:hover { background: rgba(231,111,81,0.35); }
+
+  #quiz-area { display: none; }
+  .progress-bar-wrap {
+    background: rgba(10,147,150,0.15);
+    border-radius: 8px;
+    height: 8px;
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--teal-light));
+    border-radius: 8px;
+    transition: width 0.4s ease;
+  }
+  .q-card {
+    background: var(--mid);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+  .q-num { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .q-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--text);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media(max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
+  .option-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(10,147,150,0.25);
+    border-radius: 8px;
+    padding: 14px 18px;
+    color: #c8dde0;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+    line-height: 1.4;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--teal); background: rgba(10,147,150,0.1); color: var(--text); }
+  .option-btn.correct { background: rgba(75,180,100,0.2); border-color: #4fb464; color: #7de897; }
+  .option-btn.wrong { background: rgba(231,111,81,0.2); border-color: var(--coral); color: #f4a28c; }
+  .option-btn:disabled { cursor: default; }
+
+  .feedback-box {
+    margin-top: 16px;
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    display: none;
+    line-height: 1.6;
+  }
+  .feedback-box.correct { background: rgba(75,180,100,0.15); border: 1px solid rgba(75,180,100,0.4); color: #7de897; }
+  .feedback-box.wrong { background: rgba(231,111,81,0.15); border: 1px solid rgba(231,111,81,0.4); color: #f4a28c; }
+
+  .next-btn-wrap { text-align: right; margin-top: 16px; }
+
+  .score-card {
+    background: var(--mid);
+    border-radius: 16px;
+    padding: 48px;
+    text-align: center;
+    display: none;
+    animation: fadeUp 0.5s ease;
+  }
+  .score-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    color: var(--teal-light);
+    line-height: 1;
+  }
+  .score-label { color: var(--muted); margin: 8px 0 28px; font-size: 1.1rem; }
+  .score-msg { color: var(--text); font-size: 1.05rem; margin-bottom: 28px; }
+
+  /* QnA SECTION */
+  .qna-section { margin-top: 40px; }
+  .qna-section h2 { font-family: 'Playfair Display', serif; color: var(--teal-light); font-size: 1.5rem; margin-bottom: 20px; }
+  .qna-item {
+    background: var(--mid);
+    border-radius: 10px;
+    margin-bottom: 14px;
+    overflow: hidden;
+    animation: fadeUp 0.4s ease both;
+  }
+  .qna-q {
+    padding: 18px 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    transition: background 0.2s;
+  }
+  .qna-q:hover { background: rgba(10,147,150,0.1); }
+  .qna-q-icon { color: var(--teal); font-size: 1rem; margin-top: 2px; flex-shrink: 0; }
+  .qna-q-text { color: var(--text); font-size: 0.98rem; font-weight: 600; flex: 1; line-height: 1.5; }
+  .qna-q-arrow { color: var(--muted); transition: transform 0.3s; flex-shrink: 0; }
+  .qna-a {
+    display: none;
+    padding: 0 22px 18px 50px;
+    color: #c8dde0;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    border-top: 1px solid rgba(10,147,150,0.15);
+    padding-top: 14px;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--dark); }
+  ::-webkit-scrollbar-thumb { background: var(--teal-dark); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Ecology Reviewer</h1>
+  <p>Biology · Ecosystems · Element Cycles · Interactive Quiz</p>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('notes')">📚 From the Notes</button>
+  <button class="tab-btn" onclick="switchTab('cycles')">🔄 Element Cycles</button>
+  <button class="tab-btn" onclick="switchTab('quiz')">✏️ Quiz & Q&A</button>
+</div>
+
+<!-- ══════════════════ TAB 1: NOTES ══════════════════ -->
+<div id="tab-notes" class="tab-content active">
+
+  <div class="section-card">
+    <h2>What is Ecology?</h2>
+    <p>Ecology is a branch of biology that deals with the relations of organisms to one another and to their physical surroundings. It examines how life at every scale — from a single organism to the entire biosphere — interacts with living and non-living components of the environment.</p>
+    <h3>Big Questions Ecology Asks</h3>
+    <ul>
+      <li>How is the "Balance of Nature" maintained?</li>
+      <li>How does human activity disrupt, restore, and maintain the balance of nature?</li>
+      <li>How are we responding to the call for environmental protection?</li>
+      <li>Why is the stability of ecosystems worldwide so urgent?</li>
+    </ul>
+  </div>
+
+  <div class="section-card">
+    <h2>Levels of Organization</h2>
+    <p>Ecology operates within a hierarchy of biological organization. The levels ecology focuses on are highlighted:</p>
+    <div class="hierarchy">
+      <div class="level-row"><span class="level-badge above">Universe / Galaxies</span></div>
+      <div class="level-row"><span class="level-badge above">Solar Systems</span></div>
+      <div class="level-row"><span class="level-badge above">Earth</span></div>
+      <div class="level-row"><span class="level-badge ecology">🌍 Biosphere</span></div>
+      <div class="level-row"><span class="level-badge ecology">🌲 Biomes</span></div>
+      <div class="level-row"><span class="level-badge ecology">⭐ Ecosystems ← Ecology focuses here</span></div>
+      <div class="level-row"><span class="level-badge ecology">🐾 Communities</span></div>
+      <div class="level-row"><span class="level-badge ecology">🐘 Populations</span></div>
+      <div class="level-row"><span class="level-badge ecology">🦋 Organisms</span></div>
+      <div class="level-row"><span class="level-badge below">Organs → Tissues → Cells → Molecules → Atoms</span></div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <h2>Key Ecological Terms</h2>
+    <div class="def-grid">
+      <div class="def-term">Organism</div>
+      <div class="def-desc">An individual animal, plant, or single-celled life form. The most basic unit studied in ecology.</div>
+      <div class="def-term">Population</div>
+      <div class="def-desc">All individuals of the same species living in a particular area or region at the same time.</div>
+      <div class="def-term">Community</div>
+      <div class="def-desc">A group of interdependent organisms of <em>different species</em> growing or living together in a specified habitat.</div>
+      <div class="def-term">Ecosystem</div>
+      <div class="def-desc">A biological community of interacting organisms AND their physical (abiotic) environment together.</div>
+      <div class="def-term">Biome</div>
+      <div class="def-desc">A large naturally occurring community of flora and fauna occupying a major habitat — e.g., tropical forest or tundra.</div>
+      <div class="def-term">Biosphere</div>
+      <div class="def-desc">The global sum of all ecosystems on Earth — the zone of life extending from ocean depths to the lower atmosphere.</div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <h2>Concepts of the Ecosystem</h2>
+    <h3>Biotic Community</h3>
+    <p>Different species live together and interact in a given territory. Together, they form a <strong>biotic community</strong> — a biological organization built on relationships between living things.</p>
+    <p>Members of a biotic community interact not only among themselves, but also with their physical environment — and this combined system is an <strong>ecosystem</strong>.</p>
+
+    <h3>Biotic Components (Living)</h3>
+    <div class="def-grid">
+      <div class="def-term">Autotrophs (Producers)</div>
+      <div class="def-desc">Make their own food using <strong>light energy</strong> (photosynthetic) or <strong>chemical energy</strong> (chemosynthetic). Example: plants, algae.</div>
+      <div class="def-term">Heterotrophs (Consumers)</div>
+      <div class="def-desc">Cannot make their own food; consume other organisms. Divided into <strong>macroconsumers</strong> (larger animals) and <strong>microconsumers</strong> (microbes/decomposers).</div>
+      <div class="def-term">Herbivores</div>
+      <div class="def-desc">Heterotrophs that feed solely on plants (producers). Example: cows, deer.</div>
+      <div class="def-term">Carnivores</div>
+      <div class="def-desc">Heterotrophs that feed solely on other animals (consumers). Example: lions, sharks.</div>
+      <div class="def-term">Omnivores</div>
+      <div class="def-desc">Heterotrophs that feed on both plants and animals. Example: bears, humans.</div>
+      <div class="def-term">Saprotrophs / Decomposers</div>
+      <div class="def-desc">Absorb dissolved organic materials from dead matter and return nutrients to the environment. Example: bacteria, fungi.</div>
+      <div class="def-term">Scavengers</div>
+      <div class="def-desc">Consume dead or decaying animals, bridging consumers and decomposers.</div>
+    </div>
+
+    <h3>Abiotic Components (Non-living)</h3>
+    <div class="badge-row">
+      <span class="badge badge-blue">☀️ Climate: Light, Temperature, Moisture</span>
+      <span class="badge badge-orange">🪨 Soil: Nutrients, Moisture, Acidity</span>
+      <span class="badge badge-green">⛰️ Topography: Altitude, Slope angle, Orientation</span>
+    </div>
+    <p style="margin-top:14px;">These abiotic factors shape where organisms can live and how they survive. They interact continuously with the biotic components of the ecosystem.</p>
+  </div>
+
+  <div class="section-card">
+    <h2>Types of Ecosystems</h2>
+    <div class="def-grid">
+      <div class="def-term">Natural Ecosystem</div>
+      <div class="def-desc">Formed without human intervention. Examples: forests, oceans, wetlands, grasslands. Generally more biodiverse and self-sustaining.</div>
+      <div class="def-term">Man-made Ecosystem</div>
+      <div class="def-desc">Created or heavily altered by humans. Examples: farms, fish ponds, gardens, cities. Usually less stable and biodiversity is lower.</div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <h2>Ecological Balance & Food Relationships</h2>
+    <h3>Why Food Matters</h3>
+    <p>One of the most basic relationships in a biotic community concerns <strong>food</strong>. Food serves two purposes for organisms: (1) as a <em>source of energy</em>, and (2) as <em>building material</em> for the body.</p>
+
+    <h3>Food Chain</h3>
+    <p>The simplest flow of energy: an organism feeds on another and is in turn fed upon by another — forming a linear sequence.</p>
+    <div class="badge-row">
+      <span class="badge badge-green">Plants (Producer)</span>
+      <span style="color:var(--teal);align-self:center;">→</span>
+      <span class="badge badge-blue">Grasshopper (1° Consumer)</span>
+      <span style="color:var(--teal);align-self:center;">→</span>
+      <span class="badge badge-orange">Frog (2° Consumer)</span>
+      <span style="color:var(--teal);align-self:center;">→</span>
+      <span class="badge badge-orange">Snake (3° Consumer)</span>
+    </div>
+
+    <h3>Food Web</h3>
+    <p>In nature, organisms feed on <em>multiple</em> species and are fed upon by multiple species, creating a complex, interlocking network. The more species involved in a food web, the more <strong>stable</strong> the ecosystem is — greater biodiversity equals greater stability.</p>
+
+    <h3>Trophic Levels & Energy Flow</h3>
+    <p>Energy flows through a trophic structure: from producers (1st trophic level) → 1st-order consumers → higher-level consumers. Energy <strong>diminishes</strong> at each level — approximately 90% is lost as heat at every step (only ~10% is passed on).</p>
+
+    <h3>What Limits Population Growth?</h3>
+    <ul>
+      <li><strong>Biotic limiting factors:</strong> Predators and consumers control the growth of prey populations.</li>
+      <li><strong>Abiotic limiting factors:</strong> Space, light, water, and nutrients restrict how large a population can grow.</li>
+    </ul>
+
+    <h3>Balance of Nature / Ecological Balance</h3>
+    <p>A dynamic equilibrium in the population sizes of different species that results from interactions among members of a biotic community and their physical environment. It is maintained by the <strong>interdependence</strong> of different species populations — based on three basic needs:</p>
+    <div class="badge-row">
+      <span class="badge badge-green">🍃 Food</span>
+      <span class="badge badge-blue">🛡️ Protection</span>
+      <span class="badge badge-orange">🔁 Reproduction</span>
+    </div>
+    <p style="margin-top:14px;">In a truly balanced ecosystem, all normal ecological processes continue unhampered.</p>
+  </div>
+
+</div>
+
+<!-- ══════════════════ TAB 2: ELEMENT CYCLES ══════════════════ -->
+<div id="tab-cycles" class="tab-content">
+
+  <div class="section-card" style="border-left-color:var(--sand);">
+    <h2>Biogeochemical Cycles</h2>
+    <p>A <strong>biogeochemical cycle</strong> is the pathway by which a chemical element or molecule moves through both biotic (living) and abiotic (non-living) compartments of the Earth. The major parts of the biosphere are connected by the flow of chemical elements and compounds. Matter from Earth's interior is released by volcanoes, while the atmosphere rapidly exchanges compounds with the biota and oceans. Exchanges between rocks, soils, and oceans are generally slower.</p>
+    <p>These cycles are essential for maintaining ecological balance — they ensure that nutrients are recycled and remain available to living organisms.</p>
+  </div>
+
+  <!-- CO2 CYCLE -->
+  <div class="cycle-card co2">
+    <div class="cycle-header" onclick="toggleCycle(this)">
+      <div class="cycle-icon">🌿</div>
+      <div>
+        <h2>Carbon / CO₂ Cycle</h2>
+        <p style="color:var(--muted);font-size:0.88rem;margin-top:2px;">The foundation of all organic life</p>
+      </div>
+      <span class="toggle-arrow">▼</span>
+    </div>
+    <div class="cycle-body">
+      <p>Carbon is the backbone of all organic molecules. It cycles continuously between the atmosphere, living organisms, oceans, and the Earth's crust. The primary driver of the carbon cycle is <strong>photosynthesis</strong> (which removes CO₂ from the atmosphere) and <strong>respiration</strong> (which returns it).</p>
+      <div class="cycle-steps">
+        <div class="cycle-step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Photosynthesis:</strong> Plants, algae, and cyanobacteria absorb atmospheric CO₂ and convert it into glucose using sunlight energy. Carbon becomes stored in plant tissues.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>Consumption:</strong> Herbivores eat plants, incorporating plant carbon into their own bodies. Carnivores then eat herbivores, passing carbon up the food chain.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>Cellular Respiration:</strong> All living organisms (plants, animals, fungi, bacteria) break down glucose, releasing CO₂ back into the atmosphere.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">4</div>
+          <div class="step-text"><strong>Decomposition:</strong> When organisms die, decomposers (bacteria and fungi) break down organic matter, releasing CO₂ and methane (CH₄) back into the atmosphere.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">5</div>
+          <div class="step-text"><strong>Ocean Exchange:</strong> The ocean absorbs enormous amounts of CO₂ from the atmosphere; marine organisms use it to build calcium carbonate shells and skeletons.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">6</div>
+          <div class="step-text"><strong>Fossilization & Combustion:</strong> Over millions of years, dead organisms become fossil fuels (coal, oil, gas). Burning them releases ancient stored carbon back into the atmosphere rapidly.</div>
+        </div>
+      </div>
+      <div class="key-box">
+        <h4>⚠️ Human Impact</h4>
+        <p>Burning fossil fuels and deforestation have significantly increased atmospheric CO₂ concentrations, disrupting the natural balance and intensifying the greenhouse effect and global warming.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- NITROGEN CYCLE -->
+  <div class="cycle-card nitrogen">
+    <div class="cycle-header" onclick="toggleCycle(this)">
+      <div class="cycle-icon">⚗️</div>
+      <div>
+        <h2>Nitrogen Cycle</h2>
+        <p style="color:var(--muted);font-size:0.88rem;margin-top:2px;">Essential for proteins, DNA, and RNA</p>
+      </div>
+      <span class="toggle-arrow">▼</span>
+    </div>
+    <div class="cycle-body">
+      <p>Nitrogen makes up about 78% of the atmosphere (as N₂ gas), but most organisms cannot use it directly. It must be "fixed" — converted into usable forms like ammonia (NH₃) or nitrate (NO₃⁻) — before entering food chains. Nitrogen is essential for building amino acids, proteins, and nucleic acids (DNA/RNA).</p>
+      <div class="cycle-steps">
+        <div class="cycle-step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Nitrogen Fixation:</strong> Specialized bacteria (e.g., <em>Rhizobium</em> in root nodules of legumes, and free-living <em>Azotobacter</em>) convert atmospheric N₂ into ammonia (NH₃). Lightning can also fix small amounts of nitrogen.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>Nitrification:</strong> Nitrifying bacteria (e.g., <em>Nitrosomonas</em>, <em>Nitrobacter</em>) convert ammonia → nitrite (NO₂⁻) → nitrate (NO₃⁻) in the soil. Nitrates can be absorbed by plant roots.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>Assimilation:</strong> Plants absorb nitrates through roots and build them into amino acids and proteins. Animals obtain nitrogen by consuming plants or other animals.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">4</div>
+          <div class="step-text"><strong>Ammonification:</strong> When organisms die or excrete waste, decomposers (bacteria, fungi) break down organic nitrogen compounds back into ammonia, returning it to the soil.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">5</div>
+          <div class="step-text"><strong>Denitrification:</strong> Denitrifying bacteria (e.g., <em>Pseudomonas</em>) convert nitrates back into N₂ or N₂O gas, releasing it into the atmosphere and completing the cycle.</div>
+        </div>
+      </div>
+      <div class="key-box">
+        <h4>⚠️ Human Impact</h4>
+        <p>Synthetic fertilizers introduce excess nitrogen into ecosystems, causing eutrophication in water bodies — algal blooms that deplete oxygen and kill aquatic life.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WATER CYCLE -->
+  <div class="cycle-card water">
+    <div class="cycle-header" onclick="toggleCycle(this)">
+      <div class="cycle-icon">💧</div>
+      <div>
+        <h2>Water (Hydrological) Cycle</h2>
+        <p style="color:var(--muted);font-size:0.88rem;margin-top:2px;">The continuous movement of water through Earth's systems</p>
+      </div>
+      <span class="toggle-arrow">▼</span>
+    </div>
+    <div class="cycle-body">
+      <p>Water is essential for all known life and is constantly moving through the biosphere. The water cycle connects the atmosphere, land surfaces, oceans, and living organisms. It also transports heat and dissolved nutrients across ecosystems.</p>
+      <div class="cycle-steps">
+        <div class="cycle-step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Evaporation:</strong> Solar energy heats surface water in oceans, lakes, and rivers, converting liquid water into water vapor that rises into the atmosphere.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>Transpiration:</strong> Plants release water vapor through tiny pores (stomata) in their leaves. In forests, this accounts for a large proportion of atmospheric moisture.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>Condensation:</strong> Water vapor rises, cools, and condenses around dust particles to form clouds and fog. Water droplets cluster together into clouds.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">4</div>
+          <div class="step-text"><strong>Precipitation:</strong> Water falls back to Earth's surface as rain, snow, sleet, or hail, depending on atmospheric temperature.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">5</div>
+          <div class="step-text"><strong>Surface Runoff & Infiltration:</strong> Water flows over land into rivers and streams (runoff), or seeps into the ground to become groundwater and recharge aquifers (infiltration).</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">6</div>
+          <div class="step-text"><strong>Absorption by Organisms:</strong> Living organisms take in water through roots, drinking, or absorption through skin, using it for metabolic processes before releasing it back through respiration and excretion.</div>
+        </div>
+      </div>
+      <div class="key-box">
+        <h4>⚠️ Human Impact</h4>
+        <p>Deforestation reduces transpiration, altering rainfall patterns. Urbanization creates impervious surfaces, increasing runoff and reducing groundwater recharge. Climate change intensifies the entire cycle.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHOSPHORUS CYCLE -->
+  <div class="cycle-card phosphorus">
+    <div class="cycle-header" onclick="toggleCycle(this)">
+      <div class="cycle-icon">⛰️</div>
+      <div>
+        <h2>Phosphorus Cycle</h2>
+        <p style="color:var(--muted);font-size:0.88rem;margin-top:2px;">A slow cycle with no atmospheric phase</p>
+      </div>
+      <span class="toggle-arrow">▼</span>
+    </div>
+    <div class="cycle-body">
+      <p>Phosphorus is critical for building DNA, RNA, ATP (energy currency of cells), and cell membranes. Unlike carbon and nitrogen, phosphorus has <strong>no gaseous phase</strong> — it cycles slowly through rocks, soil, water, and living organisms. It is often the <em>limiting nutrient</em> in many ecosystems.</p>
+      <div class="cycle-steps">
+        <div class="cycle-step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Weathering of Rocks:</strong> Phosphorus is slowly released from phosphate-containing rocks (like apatite) through weathering by rain, wind, and acidic compounds over long geological time scales.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>Soil Absorption:</strong> Released phosphate ions (PO₄³⁻) dissolve in soil water and can be absorbed directly by plant roots. Mycorrhizal fungi greatly enhance plant phosphorus uptake.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>Assimilation:</strong> Plants incorporate phosphorus into organic molecules. Animals obtain it by consuming plants or other animals. It is used to build bones, teeth, and energy molecules (ATP).</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">4</div>
+          <div class="step-text"><strong>Decomposition:</strong> When organisms die, decomposers break down organic phosphorus compounds, returning inorganic phosphate to the soil for reuse by plants.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">5</div>
+          <div class="step-text"><strong>Runoff to Oceans:</strong> Phosphate washes into rivers and eventually the ocean, where it sinks to form sediments. Over millions of years, geological uplift brings it back to the surface.</div>
+        </div>
+      </div>
+      <div class="key-box">
+        <h4>⚠️ Human Impact</h4>
+        <p>Mining phosphate rock for fertilizers and releasing phosphorus in sewage accelerates the cycle and causes freshwater and coastal eutrophication — destructive algal blooms that suffocate aquatic ecosystems.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- OXYGEN CYCLE -->
+  <div class="cycle-card oxygen">
+    <div class="cycle-header" onclick="toggleCycle(this)">
+      <div class="cycle-icon">🫧</div>
+      <div>
+        <h2>Oxygen Cycle</h2>
+        <p style="color:var(--muted);font-size:0.88rem;margin-top:2px;">Closely linked to the carbon and water cycles</p>
+      </div>
+      <span class="toggle-arrow">▼</span>
+    </div>
+    <div class="cycle-body">
+      <p>Oxygen makes up about 21% of Earth's atmosphere and is essential for aerobic respiration. The oxygen cycle is deeply intertwined with the carbon cycle — photosynthesis produces oxygen while consuming CO₂, and respiration does the opposite. It also involves the water cycle, as water molecules are split during photosynthesis.</p>
+      <div class="cycle-steps">
+        <div class="cycle-step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Photosynthesis (O₂ Production):</strong> Producers (plants, algae, cyanobacteria) split water molecules (H₂O) using sunlight, releasing oxygen (O₂) as a byproduct into the atmosphere.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>Aerobic Respiration (O₂ Consumption):</strong> Nearly all organisms (plants, animals, fungi, most bacteria) consume oxygen to break down glucose, releasing CO₂ and water as byproducts.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>Decomposition:</strong> Aerobic decomposers use oxygen to break down dead organic matter, returning CO₂, water, and mineral nutrients to the environment.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">4</div>
+          <div class="step-text"><strong>Ozone Layer Formation:</strong> Some O₂ in the upper atmosphere is converted to ozone (O₃) by UV radiation. The ozone layer shields Earth's surface from harmful ultraviolet radiation.</div>
+        </div>
+        <div class="cycle-step">
+          <div class="step-num">5</div>
+          <div class="step-text"><strong>Combustion & Oxidation:</strong> Burning of organic matter (forest fires, fossil fuels) and rusting of metals consumes O₂, releasing CO₂ and oxides back into the environment.</div>
+        </div>
+      </div>
+      <div class="key-box">
+        <h4>⚠️ Human Impact</h4>
+        <p>Burning fossil fuels, deforestation, and industrial pollution deplete atmospheric oxygen (slowly) and damage the ozone layer (CFCs). Deoxygenation of water bodies ("dead zones") is a growing problem in many regions.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════ TAB 3: QUIZ ══════════════════ -->
+<div id="tab-quiz" class="tab-content">
+
+  <div class="quiz-intro">
+    <h2>Test Your Knowledge</h2>
+    <p>20 questions covering ecology, ecosystems, and element cycles. Choose a mode to begin.</p>
+    <div class="quiz-controls">
+      <button class="btn btn-primary" onclick="startQuiz('all')">All 20 Questions</button>
+      <button class="btn btn-secondary" onclick="startQuiz('notes')">Notes Only (10 Q)</button>
+      <button class="btn btn-secondary" onclick="startQuiz('cycles')">Cycles Only (10 Q)</button>
+    </div>
+  </div>
+
+  <div id="quiz-area">
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog-fill" style="width:0%"></div></div>
+    <div id="q-display"></div>
+    <div class="score-card" id="score-card">
+      <div class="score-num" id="score-num">0/20</div>
+      <div class="score-label">Final Score</div>
+      <div class="score-msg" id="score-msg"></div>
+      <div class="quiz-controls">
+        <button class="btn btn-primary" onclick="restartQuiz()">Try Again</button>
+        <button class="btn btn-secondary" onclick="switchTab('notes')">Review Notes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q&A Section -->
+  <div class="qna-section">
+    <h2>📖 Study Q & A</h2>
+
+    <div class="qna-item">
+      <div class="qna-q" onclick="toggleQna(this)">
+        <span class="qna-q-icon">Q</span>
+        <span class="qna-q-text">What is the difference between a food chain and a food web?</span>
+        <span class="qna-q-arrow">▾</span>
+      </div>
+      <div class="qna-a">A <strong>food chain</strong> is the simplest representation of energy flow — a linear sequence where organism A eats organism B, which is eaten by organism C. A <strong>food web</strong> is more realistic: it shows the complex, interlocking feeding relationships where each organism may feed on multiple species and be fed upon by multiple species. Food webs are far more stable than food chains — if one species disappears in a web, the ecosystem can compensate through other pathways.</div>
+    </div>
+
+    <div class="qna-item">
+      <div class="qna-q" onclick="toggleQna(this)">
+        <span class="qna-q-icon">Q</span>
+        <span class="qna-q-text">Why does energy decrease as it moves up trophic levels?</span>
+        <span class="qna-q-arrow">▾</span>
+      </div>
+      <div class="qna-a">At each trophic level, organisms use most of the energy they consume for their own metabolic processes — growth, movement, reproduction, and heat production. Only about <strong>10% of energy</strong> is stored in body tissues that can be passed on to the next level. This is why food chains rarely have more than 4–5 levels: there simply isn't enough energy left to support higher-level consumers beyond that point. This principle is represented by the <strong>Ecological Pyramid</strong>.</div>
+    </div>
+
+    <div class="qna-item">
+      <div class="qna-q" onclick="toggleQna(this)">
+        <span class="qna-q-icon">Q</span>
+        <span class="qna-q-text">How does greater biodiversity contribute to ecosystem stability?</span>
+        <span class="qna-q-arrow">▾</span>
+      </div>
+      <div class="qna-a">Greater biodiversity creates a more complex and interconnected food web. When one species declines or disappears, other species can fill similar ecological roles (redundancy). This means the ecosystem is less vulnerable to collapse from the loss of any single species. A more biodiverse system also has more pathways for energy flow and nutrient cycling, making it more resilient to disturbances like drought, disease, or invasive species.</div>
+    </div>
+
+    <div class="qna-item">
+      <div class="qna-q" onclick="toggleQna(this)">
+        <span class="qna-q-icon">Q</span>
+        <span class="qna-q-text">What is the role of decomposers in an ecosystem?</span>
+        <span class="qna-q-arrow">▾</span>
+      </div>
+      <div class="qna-a">Decomposers (mainly bacteria and fungi) are critical for breaking down dead organic matter — the remains of plants and animals. This decomposition releases nutrients (like nitrogen and phosphorus) that are locked in dead tissue back into the soil and water, where they can be reused by producers. Without decomposers, nutrients would remain locked in dead matter, cycling would halt, and ecosystems would collapse. They are the critical link that "closes" all biogeochemical cycles.</div>
+    </div>
+
+    <div class="qna-item">
+      <div class="qna-q" onclick="toggleQna(this)">
+        <span class="qna-q-icon">Q</span>
+        <span class="qna-q-text">Why is nitrogen fixation so important?</span>
+        <span class="qna-q-arrow">▾</span>
+      </div>
+      <div class="qna-a">Although nitrogen gas (N₂) makes up 78% of the atmosphere, most organisms cannot use it directly. Nitrogen fixation — the conversion of N₂ into ammonia (NH₃) or nitrates (NO₃⁻) by specialized bacteria — makes nitrogen available to plants and, through them, to all other organisms. Without nitrogen fixation, there would be no way to replenish soil nitrogen used by plants, and the synthesis of proteins, DNA, and RNA would be severely limited, preventing life as we know it from existing.</div>
+    </div>
+
+    <div class="qna-item">
+      <div class="qna-q" onclick="toggleQna(this)">
+        <span class="qna-q-icon">Q</span>
+        <span class="qna-q-text">What makes the phosphorus cycle unique compared to carbon and nitrogen cycles?</span>
+        <span class="qna-q-arrow">▾</span>
+      </div>
+      <div class="qna-a">The phosphorus cycle is unique because it has <strong>no significant atmospheric phase</strong>. Carbon and nitrogen both cycle through the atmosphere as gases (CO₂, N₂, N₂O), allowing for relatively rapid global redistribution. Phosphorus, however, moves only through water, soil, rocks, and living organisms. The cycle is extremely slow — the geological phase (from ocean sediments back to surface rock via tectonic uplift) takes millions of years. This makes phosphorus the most common <strong>limiting nutrient</strong> in ecosystems.</div>
+    </div>
+
+    <div class="qna-item">
+      <div class="qna-q" onclick="toggleQna(this)">
+        <span class="qna-q-icon">Q</span>
+        <span class="qna-q-text">What are abiotic factors and how do they affect organisms?</span>
+        <span class="qna-q-arrow">▾</span>
+      </div>
+      <div class="qna-a">Abiotic factors are the non-living physical and chemical components of an environment. The main categories are: <strong>Climate</strong> (light intensity, temperature, rainfall, humidity), <strong>Soil</strong> (nutrient content, pH, moisture, texture), and <strong>Topography</strong> (altitude, slope angle, orientation). These factors determine which organisms can survive in a given area — for example, low light limits plant growth, extreme temperatures restrict the range of many animals, and soil pH affects what nutrients plants can absorb. Abiotic factors directly set the carrying capacity of an ecosystem.</div>
+    </div>
+
+    <div class="qna-item">
+      <div class="qna-q" onclick="toggleQna(this)">
+        <span class="qna-q-icon">Q</span>
+        <span class="qna-q-text">How do human activities disrupt the balance of nature?</span>
+        <span class="qna-q-arrow">▾</span>
+      </div>
+      <div class="qna-a">Humans disrupt ecological balance in multiple ways: <strong>Deforestation</strong> removes habitats and disrupts the carbon and water cycles. <strong>Burning fossil fuels</strong> rapidly releases ancient carbon, elevating CO₂ and causing climate change. <strong>Overhunting/overfishing</strong> removes key species from food webs, causing trophic cascades. <strong>Agricultural fertilizers</strong> introduce excess nitrogen and phosphorus into waterways (eutrophication). <strong>Pollution</strong> introduces toxins that bioaccumulate up food chains. <strong>Invasive species</strong> introduced by humans outcompete native species and collapse local food webs.</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── TAB SWITCHING ──
+function switchTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    if (b.textContent.toLowerCase().includes(id === 'notes' ? 'notes' : id === 'cycles' ? 'cycle' : 'quiz')) b.classList.add('active');
+  });
+}
+
+// ── CYCLE TOGGLE ──
+function toggleCycle(header) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.toggle-arrow');
+  const isOpen = body.style.display !== 'none' && body.style.display !== '';
+  body.style.display = isOpen ? 'none' : 'block';
+  arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+// Open all cycles by default
+document.querySelectorAll('.cycle-body').forEach(b => b.style.display = 'block');
+document.querySelectorAll('.toggle-arrow').forEach(a => a.style.transform = 'rotate(180deg)');
+
+// ── Q&A TOGGLE ──
+function toggleQna(el) {
+  const ans = el.nextElementSibling;
+  const arrow = el.querySelector('.qna-q-arrow');
+  const isOpen = ans.style.display === 'block';
+  ans.style.display = isOpen ? 'none' : 'block';
+  arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
+
+// ── QUIZ DATA ──
+const allQuestions = [
+  // Notes questions
+  { q: "What is ecology?", opts: ["The study of plant cells", "A branch of biology dealing with organism relations to each other and their environment", "The study of geological formations", "A branch of chemistry studying organic compounds"], ans: 1, cat: 'notes', exp: "Ecology is a branch of biology that deals with the relations of organisms to one another and to their physical surroundings." },
+  { q: "Which level of organization is DIRECTLY above 'Communities' in the ecological hierarchy?", opts: ["Populations", "Organisms", "Ecosystems", "Biomes"], ans: 2, cat: 'notes', exp: "The hierarchy goes: Organisms → Populations → Communities → Ecosystems → Biomes → Biosphere." },
+  { q: "What is a biotic community?", opts: ["Only the plant life in an area", "A group of organisms of the same species", "Different species living and interacting together in a given territory", "The non-living components of an environment"], ans: 2, cat: 'notes', exp: "A biotic community forms when different species live together and interact, constituting a biological organization." },
+  { q: "Which type of organism uses chemical energy to make its own food?", opts: ["Heterotroph", "Photosynthetic autotroph", "Chemosynthetic autotroph", "Saprotroph"], ans: 2, cat: 'notes', exp: "Autotrophs make their own food — photosynthetic autotrophs use light, while chemosynthetic autotrophs use chemical energy." },
+  { q: "What do saprotrophic organisms do?", opts: ["Hunt prey actively", "Photosynthesize using sunlight", "Absorb dissolved organic materials from dead matter", "Produce nitrogen for the soil"], ans: 2, cat: 'notes', exp: "Saprotrophic organisms form a special group that simply absorbs dissolved organic materials from dead organic matter." },
+  { q: "Which abiotic component involves altitude and slope angle?", opts: ["Climate", "Soil", "Topography", "Biome"], ans: 2, cat: 'notes', exp: "Topography is characterized by altitude, angle of slope, orientation of slope, and other physical landscape features." },
+  { q: "A food chain is different from a food web because:", opts: ["A food chain involves decomposers; food webs do not", "A food web is a single linear sequence; food chains are complex", "A food chain is a simple linear sequence; a food web is complex and interlocking", "Food chains only apply to marine ecosystems"], ans: 2, cat: 'notes', exp: "In a food chain, organisms feed on one another in a linear sequence. A food web shows the complex pattern where organisms feed on and are fed upon by multiple species." },
+  { q: "What happens to energy as it moves up trophic levels?", opts: ["It increases at each level", "It stays the same", "It diminishes from one level to the next", "It is destroyed at the highest level"], ans: 2, cat: 'notes', exp: "Energy flows through a trophic structure diminishing from one level to the next — approximately only 10% is transferred to the next trophic level." },
+  { q: "The 'balance of nature' is maintained by:", opts: ["Random events in the environment", "Only the physical climate conditions", "The interdependence of different species populations in an area", "Human conservation efforts alone"], ans: 2, cat: 'notes', exp: "Balance of nature is maintained by the interdependence of the different species populations in the area, based on their needs for food, protection, and reproduction." },
+  { q: "An ecosystem that has greater biodiversity is generally:", opts: ["Less stable because more things can go wrong", "More stable because of more complex food web relationships", "More stable only in tropical regions", "Less stable because resources are spread too thin"], ans: 1, cat: 'notes', exp: "The more complex a food web (greater number of species populations involved), the more stable the ecosystem. Greater biodiversity = greater stability." },
+  // Cycles questions
+  { q: "Which process removes CO₂ from the atmosphere in the carbon cycle?", opts: ["Respiration", "Combustion", "Photosynthesis", "Decomposition"], ans: 2, cat: 'cycles', exp: "Photosynthesis removes CO₂ from the atmosphere and converts it into glucose, storing carbon in plant tissues." },
+  { q: "Why can most organisms NOT use atmospheric nitrogen (N₂) directly?", opts: ["N₂ is toxic to most life forms", "N₂ is too heavy to enter organisms", "N₂ must first be converted to a usable form like ammonia or nitrate", "Organisms only need nitrogen in gas form"], ans: 2, cat: 'cycles', exp: "Atmospheric N₂ is stable and cannot be directly used. It must be 'fixed' — converted to ammonia or nitrates by specialized bacteria — before organisms can use it." },
+  { q: "Which bacteria converts ammonia into nitrites and nitrates in the soil?", opts: ["Denitrifying bacteria", "Nitrifying bacteria (Nitrosomonas, Nitrobacter)", "Decomposing fungi", "Rhizobium only"], ans: 1, cat: 'cycles', exp: "Nitrifying bacteria (including Nitrosomonas and Nitrobacter) convert ammonia to nitrite, then nitrate — a process called nitrification." },
+  { q: "What makes the phosphorus cycle unique among major biogeochemical cycles?", opts: ["It cycles faster than any other element", "It has no significant atmospheric (gaseous) phase", "It only occurs in ocean ecosystems", "It does not involve living organisms"], ans: 1, cat: 'cycles', exp: "Unlike carbon and nitrogen, phosphorus has no significant gaseous phase. It cycles only through rocks, soil, water, and living organisms — making it an extremely slow cycle." },
+  { q: "In the water cycle, what is 'transpiration'?", opts: ["Water evaporating from the ocean surface", "The condensation of water vapor into clouds", "Water released as vapor by plants through their stomata", "Rainfall into river systems"], ans: 2, cat: 'cycles', exp: "Transpiration is the release of water vapor by plants through tiny pores called stomata in their leaves, contributing significantly to atmospheric moisture." },
+  { q: "What is released as a byproduct when producers split water molecules during photosynthesis?", opts: ["Carbon dioxide (CO₂)", "Nitrogen gas (N₂)", "Oxygen (O₂)", "Phosphate (PO₄³⁻)"], ans: 2, cat: 'cycles', exp: "During photosynthesis, producers split water molecules (H₂O) using sunlight, releasing oxygen (O₂) as a byproduct into the atmosphere." },
+  { q: "What does 'denitrification' accomplish in the nitrogen cycle?", opts: ["It converts N₂ into ammonia", "It converts nitrates back into N₂ gas, releasing it to the atmosphere", "It moves phosphorus from soil to water", "It converts CO₂ to organic carbon"], ans: 1, cat: 'cycles', exp: "Denitrifying bacteria convert nitrates back into N₂ or N₂O gas, releasing it into the atmosphere and completing the nitrogen cycle." },
+  { q: "Human overuse of phosphate fertilizers most directly causes:", opts: ["Ozone depletion", "Deforestation", "Eutrophication — algal blooms that deplete oxygen in water bodies", "Acid rain"], ans: 2, cat: 'cycles', exp: "Excess phosphorus from fertilizers washes into water bodies, fueling algal blooms (eutrophication). When the algae die, their decomposition depletes oxygen, creating 'dead zones'." },
+  { q: "In the biogeochemical cycle diagram, what releases matter from Earth's interior into the atmosphere?", opts: ["Rainfall and rivers", "Decomposers in soil", "Volcanoes", "Ocean currents"], ans: 2, cat: 'cycles', exp: "According to the generalized biogeochemical cycle, matter from Earth's interior is released by volcanoes into the atmosphere and environment." },
+  { q: "Which cycle is most closely and directly intertwined with BOTH the carbon cycle AND the water cycle?", opts: ["Phosphorus cycle", "Nitrogen cycle", "Oxygen cycle", "Sulfur cycle"], ans: 2, cat: 'cycles', exp: "The oxygen cycle is deeply intertwined with both: photosynthesis produces O₂ while consuming CO₂ (carbon cycle), and water molecules (water cycle) are split to release that oxygen." }
+];
+
+let currentQuestions = [];
+let currentQ = 0;
+let score = 0;
+let answered = false;
+let quizMode = 'all';
+
+function startQuiz(mode) {
+  quizMode = mode;
+  if (mode === 'notes') currentQuestions = allQuestions.filter(q => q.cat === 'notes');
+  else if (mode === 'cycles') currentQuestions = allQuestions.filter(q => q.cat === 'cycles');
+  else currentQuestions = [...allQuestions];
+
+  // Shuffle
+  currentQuestions = currentQuestions.sort(() => Math.random() - 0.5);
+
+  currentQ = 0; score = 0; answered = false;
+  document.getElementById('quiz-area').style.display = 'block';
+  document.getElementById('score-card').style.display = 'none';
+  document.querySelector('.quiz-intro').style.display = 'none';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  if (currentQ >= currentQuestions.length) { showScore(); return; }
+  const q = currentQuestions[currentQ];
+  const total = currentQuestions.length;
+  document.getElementById('prog-fill').style.width = ((currentQ / total) * 100) + '%';
+  answered = false;
+
+  const html = `
+    <div class="q-card">
+      <div class="q-num">Question ${currentQ + 1} of ${total}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options-grid" id="opts">
+        ${q.opts.map((o, i) => `<button class="option-btn" onclick="selectAnswer(${i})">${o}</button>`).join('')}
+      </div>
+      <div class="feedback-box" id="fb"></div>
+    </div>
+    <div class="next-btn-wrap" id="next-wrap" style="display:none">
+      <button class="btn btn-primary" onclick="nextQuestion()">${currentQ + 1 < total ? 'Next Question →' : 'See Results'}</button>
+    </div>
+  `;
+  document.getElementById('q-display').innerHTML = html;
+}
+
+function selectAnswer(i) {
+  if (answered) return;
+  answered = true;
+  const q = currentQuestions[currentQ];
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach(b => b.disabled = true);
+  btns[q.ans].classList.add('correct');
+  if (i !== q.ans) btns[i].classList.add('wrong');
+  else score++;
+
+  const fb = document.getElementById('fb');
+  fb.style.display = 'block';
+  fb.className = 'feedback-box ' + (i === q.ans ? 'correct' : 'wrong');
+  fb.innerHTML = (i === q.ans ? '✓ Correct! ' : '✗ Not quite. ') + q.exp;
+  document.getElementById('next-wrap').style.display = 'block';
+}
+
+function nextQuestion() { currentQ++; renderQuestion(); }
+
+function showScore() {
+  document.getElementById('q-display').innerHTML = '';
+  document.getElementById('prog-fill').style.width = '100%';
+  const card = document.getElementById('score-card');
+  const total = currentQuestions.length;
+  card.style.display = 'block';
+  document.getElementById('score-num').textContent = score + '/' + total;
+  const pct = Math.round((score / total) * 100);
+  let msg = pct >= 90 ? '🌟 Outstanding! You have a deep understanding of ecology.' :
+            pct >= 75 ? '✅ Great work! A few more review sessions and you\'ll master this.' :
+            pct >= 50 ? '📚 Good effort. Review the notes and cycles tabs for the topics you missed.' :
+            '🔁 Keep studying! Review the material and try again — you\'ll improve!';
+  document.getElementById('score-msg').textContent = msg;
+}
+
+function restartQuiz() { startQuiz(quizMode); }
+</script>
+</body>
+</html>
